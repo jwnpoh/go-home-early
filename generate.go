@@ -12,7 +12,7 @@ import (
 )
 
 func generate(w http.ResponseWriter, r *http.Request) {
-	err := tpl.ExecuteTemplate(w, "generate.html", nil)
+	err := tpl.ExecuteTemplate(w, "generate.gohtml", cmds[0])
 	if err != nil {
 		log.Fatal("unable to execute template - ", err)
 	}

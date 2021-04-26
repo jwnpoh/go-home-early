@@ -28,7 +28,7 @@ func open(url string) error {
 }
 
 func init() {
-	tpl = template.Must(template.ParseGlob("public/views/*html"))
+	tpl = template.Must(template.ParseGlob("public/views/*gohtml"))
 }
 
 func main() {
