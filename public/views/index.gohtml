@@ -32,16 +32,8 @@
     <div class="row">
       <p>Go Home Early is a utility to help subject coordinators go home early. Go Home Early provides a few functions to help coordinators perform various routine batch actions related to results administration quickly.</p>
     </div>
-    {{range slice . 0 2}}
+    {{range .}}
     <div class="row">
-      <div class="six columns">
-        <h4><a href="/{{.Path}}">{{.Title}}</a></h4>
-        <p>{{.Description}}</p>
-      </div>
-    {{end}}
-  </div>
-    <div class="row">
-    {{range slice . 2}}
       <div class="six columns">
         <h4><a href="/{{.Path}}">{{.Title}}</a></h4>
         <p>{{.Description}}</p>

@@ -16,27 +16,34 @@
   <!-- <link rel="icon" type="image/png" href="images/favicon.png"> -->
 </head>
 
-
 <body>
   <div class="container">
     {{template "header"}}
   </div>
 
   <div class="container">
-    <h4>{{.Title}}</h4>
-    <p>{{.Description}}</p>
+    <form action="http://localhost:8181/generate/generated" method="POST">
+      <p>Please select the heading for the column that you wish to generate marksheets from: </p>
+      <br>
+      
+      {{$header := index . 0}}
+      <div class="row">
+        <div class="six columns">
+          <label for="colIndex">Column headers (select one)</label>
+          <select id="colIndex" class="u-full-width" name="colIndex">
+          {{range $i, $j := $header}}
+            <option value="{{$i}}">{{$j}}</option>
+          {{end}}
+          </select>
+        </div>
+        <div class="six columns">
+          <input class="button" type="submit" value="Submit">
+        </div>
+      </div>
+    </form>
   </div>
-
-  <div class="container">
-  <form action="http://localhost:8181/generate/generator" enctype="multipart/form-data" method="POST">
-    <input class="button" type="file" name="userFile">
-    <input class="button" type="submit" value="Upload">
-  </form>
-</div>
-
   <div class="container">
     {{template "footer"}}
   </div>
-
 </body>
 </html>

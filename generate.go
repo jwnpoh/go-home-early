@@ -6,10 +6,17 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
+	"strconv"
 
 	mime "github.com/gabriel-vasile/mimetype"
 )
+
+type templateData struct {
+	csvRecords [][]string
+	colIndex   int
+}
+
+var t templateData
 
 func generate(w http.ResponseWriter, r *http.Request) {
 	err := tpl.ExecuteTemplate(w, "generate.gohtml", cmds[0])
@@ -31,24 +38,17 @@ func generateCmd(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(32 << 20)
 
 	// Gets the file, and fileheader
-	file, header, err := r.FormFile("userFile")
+	file, _, err := r.FormFile("userFile")
 	if err != nil {
 		log.Fatal("Error retrieving file - ", err)
 	}
 	defer file.Close()
 
-	// Print out metadata
-	fmt.Printf("Uploaded File: %v\n", header.Filename)
-	fmt.Printf("File Size: %v\n", header.Size)
-	fmt.Printf("MIME Header: %v\n", header.Header)
-
-	buf := make([]byte, 0, 512)
-
+	// Read the file into useable []bytes
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
 		log.Fatal("Unable to read uploaded file - ", err)
 	}
-	buf = append(buf, fileBytes...)
 
 	// Check that the correct filetype is uploaded
 	filetype := mime.Detect(fileBytes)
@@ -57,7 +57,11 @@ func generateCmd(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Uploaded file of invalid file format.")
 		return
 	}
-	// Create tmpFile for working
+
+	// Create and write temp file for working
+	buf := make([]byte, 0, 512)
+	buf = append(buf, fileBytes...)
+
 	tmpFile, err := ioutil.TempFile("tmp", "tmp*.csv")
 	if err != nil {
 		log.Fatal("Unable to create temp file from upload - ", err)
@@ -68,13 +72,28 @@ func generateCmd(w http.ResponseWriter, r *http.Request) {
 		log.Fatal("Unable to write file - ", err)
 	}
 
-	tmpFile.Close()
+	// Take file bytes data for manipulation
+	records := readCSV(tmpFile.Name())
 
-	err = os.Rename(tmpFile.Name(), filepath.Join("tmp", header.Filename))
+	t.csvRecords = records
 
+	tpl.ExecuteTemplate(w, "display_records.gohtml", &records)
+}
+
+func generatorPublic(w http.ResponseWriter, r *http.Request) {
+	colIndex, err := strconv.Atoi(r.FormValue("colIndex"))
 	if err != nil {
-		log.Fatal("Error renaming file - ", err)
+		log.Fatal("Wrong value type received from validation. Check code - ", err)
 	}
 
-	http.ServeFile(w, r, filepath.Join("tmp", header.Filename))
+	t.colIndex = colIndex
+
+	filenames := generatorServer(t)
+
+	for _, j := range filenames {
+		fmt.Fprintf(w, "Successfully generated...%v\n", j)
+	}
 }
+
+// Serve file to user
+// http.ServeFile(w, r, filepath.Join("tmp", header.Filename)) */
