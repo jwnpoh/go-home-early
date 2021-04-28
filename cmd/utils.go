@@ -9,14 +9,6 @@ import (
 	"path/filepath"
 )
 
-// generator takes a csv file and generates separate csv files sorted according to user-defined
-// criteria (e.g. sort by tutor name)
-func generatorServer(t templateData) string {
-	filenames := sortItOut(t.csvRecords, t.colIndex)
-	archive := zippyZip(filenames, "marksheets.zip")
-	return archive
-}
-
 // readCSV opens a csv file and reads it into a [][]string
 func readCSV(f string) [][]string {
 	file, err := os.Open(f)

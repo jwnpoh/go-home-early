@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	mime "github.com/gabriel-vasile/mimetype"
@@ -81,6 +82,8 @@ func generateCmd(w http.ResponseWriter, r *http.Request) {
 }
 
 func generatorPublic(w http.ResponseWriter, r *http.Request) {
+	defer os.RemoveAll(filepath.Join("tmp", "marksheets"))
+	defer os.Remove(filepath.Join("tmp", "marksheets.zip"))
 	colIndex, err := strconv.Atoi(r.FormValue("colIndex"))
 	if err != nil {
 		log.Fatal("Wrong value type received from validation. Check code - ", err)
@@ -94,5 +97,10 @@ func generatorPublic(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, archive)
 }
 
-// Serve file to user
-// http.ServeFile(w, r, filepath.Join("tmp", header.Filename)) */
+// generator takes a csv file and generates separate csv files sorted according to user-defined
+// criteria (e.g. sort by tutor name)
+func generatorServer(t templateData) string {
+	filenames := sortItOut(t.csvRecords, t.colIndex)
+	archive := zippyZip(filenames, "marksheets.zip")
+	return archive
+}
