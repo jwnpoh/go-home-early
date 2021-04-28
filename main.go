@@ -32,11 +32,11 @@ func init() {
 }
 
 func main() {
-	err := open("http://localhost:8181/")
+	err := open("http://localhost:2021/")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	routes()
-	log.Fatal(http.ListenAndServe(":8181", nil))
+	log.Fatal(http.ListenAndServe(":2021", nil))
 }
