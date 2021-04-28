@@ -1,5 +1,5 @@
 # What
-Go Home Early is a utility to help coordinators go home early.
+Go Home Early is a utility to help subject coordinators (especially those coordinating subjects with large cohorts and numerous classes/tutors) go home early.
 
 # Why
 Coordinators maintain a central document in Excel that keeps track of the cohort's results and data across all assessments in the two-year period. Each time there is an assessment there is a bunch of routine, repetitive actions that need to be taken. These are by no means difficult to do, but can be tedious and time-consuming.  
@@ -26,17 +26,15 @@ Why are we not automating some of these mundane routine tasks?
 
 
 # How  
-```
-$ gohome <command> [arguments]
-```
 
-The commands and their arguments are:
-- `gohome generate 'central results sheet.csv'`  
-        generates individual marks sheets for tutors by tutor name from 'central results sheet.csv'.  
-- `gohome record 'central results sheet.csv' 'directory containing all tutors marks sheets'`  
-        records marks from tutors' marks sheets onto central results sheet.  
-- `gohome cockpit 'central results sheet.csv' 'directory containing all downloaded csv templates from Cockpit'`  
-        populates csv templates provided by tutors with the total mark to be submitted in Cockpit.  
+### Launch from terminal
+```
+$ go-home-early
+```
+### Launch from GUI
+Double-click the executable file.
+
+Both methods will launch an instance of the default browser requesting at `localhost:2021`.  
   
 <br>
 
@@ -46,14 +44,14 @@ The commands and their arguments are:
 - Make sure that the names on the *central results list* match exactly as they appear on Cockpit. Order does not need to be the same. (similar to Excel vlookup).
 
 
-# Limitations/to-do:  
-- [x] Implement batch lookup from multiple input files to central results list.
-- [x] Error handling. Should output message to inform user if there are records that did not match.
-- [x] Add comments.
-- [x] Get user input to indicate the correct column to match instead of hard-coding it.
-- [x] Get user input to indicate which column to find the final mark value.
-- [ ] Auto-detect the correct column to match instead of hard-coding it?
-- [ ] Auto-detect which column to find the final mark value?
-- [ ] Review the matching logic to be more rigorous. May need help.
-- [ ] Tests. Still figuring out how tests work and how to write tests.
-- [ ] Consider working directly with Excel files with the help of some Excel-Go packages.
+# Progress:  
+[x] Basic server and routing
+[x] Generate command
+[ ] Record command
+[ ] Cockpit command
+[ ] Analyse command
+[ ] Testing
+[ ] Look into session management
+[ ] Look into security
+[ ] Better organisation of routes and services
+*Go Home Early is currently in a hacky-nooby-anything-that-works status. The app only kinda works and the code is amateur.*
