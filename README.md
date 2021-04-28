@@ -45,13 +45,13 @@ Both methods will launch an instance of the default browser requesting at `local
 
 
 # Progress:  
-[x] Basic server and routing
-[x] Generate command
-[ ] Record command
-[ ] Cockpit command
-[ ] Analyse command
-[ ] Testing
-[ ] Look into session management
-[ ] Look into security
-[ ] Better organisation of routes and services
+- [x] Basic server and routing
+- [x] Generate command
+- [ ] Record command
+- [ ] Cockpit command
+- [ ] Analyse command
+- [ ] Testing
+- [ ] Look into session management
+- [ ] Look into security
+- [ ] Better organisation of routes and services
 *Go Home Early is currently in a hacky-nooby-anything-that-works status. The app only kinda works and the code is amateur.*
