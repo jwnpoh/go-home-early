@@ -53,5 +53,6 @@ Both methods will launch an instance of the default browser requesting at `local
 - [ ] Testing
 - [ ] Look into session management
 - [ ] Look into security
-- [ ] Better organisation of routes and services
+- [ ] Better organisation of routes and services  
+
 *Go Home Early is currently in a hacky-nooby-anything-that-works status. The app only kinda works and the code is amateur.*
