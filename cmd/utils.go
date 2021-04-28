@@ -17,6 +17,8 @@ func readCSV(f string) [][]string {
 	}
 	defer file.Close()
 
+	defer os.Remove(file.Name())
+
 	r := csv.NewReader(file)
 	r.FieldsPerRecord = -1
 

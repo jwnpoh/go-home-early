@@ -67,6 +67,7 @@ func generateCmd(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal("Unable to create temp file from upload - ", err)
 	}
+	defer tmpFile.Close()
 
 	_, err = tmpFile.Write(buf)
 	if err != nil {
