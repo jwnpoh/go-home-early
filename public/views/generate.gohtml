@@ -19,23 +19,25 @@
 
 <body>
   <div class="container">
-    {{template "header"}}
+    <div>
+      {{template "header"}}
+    </div>
+
+    <div> 
+      <h4>{{.Title}}</h4>
+      <p>{{.Description}}</p>
+    </div>
+
+    <div>
+    <form action="http://localhost:2021/generate/generator" enctype="multipart/form-data" method="POST">
+      <input class="button" type="file" name="userFile">
+      <input class="button" type="submit" value="Upload">
+    </form>
   </div>
 
-  <div class="container">
-    <h4>{{.Title}}</h4>
-    <p>{{.Description}}</p>
-  </div>
-
-  <div class="container">
-  <form action="http://localhost:8181/generate/generator" enctype="multipart/form-data" method="POST">
-    <input class="button" type="file" name="userFile">
-    <input class="button" type="submit" value="Upload">
-  </form>
-</div>
-
-  <div class="container">
-    {{template "footer"}}
+    <div>
+      {{template "footer"}}
+    </div>
   </div>
 
 </body>
