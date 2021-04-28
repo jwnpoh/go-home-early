@@ -1,6 +1,7 @@
 package main
 
 import (
+	"archive/zip"
 	"encoding/csv"
 	"io"
 	"log"
@@ -8,23 +9,24 @@ import (
 	"path/filepath"
 )
 
-// generator takes a csv file and generates separate csv files sorted according to user-defined criteria (e.g. sort by tutor name)
-func generatorServer(t templateData) []string {
+// generator takes a csv file and generates separate csv files sorted according to user-defined
+// criteria (e.g. sort by tutor name)
+func generatorServer(t templateData) string {
 	filenames := sortItOut(t.csvRecords, t.colIndex)
-	return filenames
+	archive := zippyZip(filenames, "marksheets.zip")
+	return archive
 }
 
+// readCSV opens a csv file and reads it into a [][]string
 func readCSV(f string) [][]string {
-	// Open file to read bytes
 	file, err := os.Open(f)
 	if err != nil {
 		log.Fatal("error opening template: ", err)
 	}
 	defer file.Close()
 
-	// Encode bytes to *csv.Reader
 	r := csv.NewReader(file)
-	r.FieldsPerRecord = -1 // Disable checking for correct number of fields to allow for variable number of fields per record
+	r.FieldsPerRecord = -1
 
 	recs := make([][]string, 0, 50)
 	for {
@@ -40,8 +42,8 @@ func readCSV(f string) [][]string {
 	return recs
 }
 
+// writeCSV takes a [][]string and writes csv encoded file specified by the given filename
 func writeCSV(recs [][]string, fileName string) (string, error) {
-	// Prepare output file
 	out, err := os.Create(fileName)
 	w := csv.NewWriter(out)
 	defer out.Close()
@@ -56,12 +58,12 @@ func writeCSV(recs [][]string, fileName string) (string, error) {
 	return out.Name(), nil
 }
 
+// sortItOut implements a simple sorting algorithm to generate templates according to user-defined criteria
 func sortItOut(recs [][]string, colIndex int) []string {
-	// Prepare mapping data structures
+
 	tutorsMap := make(map[string][][]string)
 	outRecs := make([][]string, 0, 25)
 
-	// Do mapping of student recs by tutor
 	for n, i := range recs {
 		if n < 1 {
 			outRecs = append(outRecs, i)
@@ -70,7 +72,6 @@ func sortItOut(recs [][]string, colIndex int) []string {
 		tutorsMap[i[colIndex]] = append(tutorsMap[i[colIndex]], i)
 	}
 
-	// Prepare output folder
 	if _, err := os.Stat(filepath.Join("tmp", "marksheets")); os.IsNotExist(err) {
 		err := os.Mkdir(filepath.Join("tmp", "marksheets"), 0755)
 		if err != nil {
@@ -79,17 +80,12 @@ func sortItOut(recs [][]string, colIndex int) []string {
 	}
 
 	var xOutName []string
-	// Prepare writing to file
 	for i, j := range tutorsMap {
 		k := make([][]string, 0, 25)
 
-		// Insert header row to be written before student recs
 		k = append(k, outRecs...)
-
-		// Insert student recs
 		k = append(k, j...)
 
-		// Write CSV files
 		fileName := filepath.Join("tmp", "marksheets", i) + ".csv"
 		outName, err := writeCSV(k, fileName)
 		if err != nil {
@@ -100,4 +96,51 @@ func sortItOut(recs [][]string, colIndex int) []string {
 		xOutName = append(xOutName, outName)
 	}
 	return xOutName
+}
+
+func zippyZip(files []string, filename string) string {
+	newZipFile, err := os.Create(filepath.Join("tmp", filename))
+	if err != nil {
+		log.Fatalf("Unable to create new archive %s - %v\n", filename, err)
+	}
+	defer newZipFile.Close()
+
+	zipWriter := zip.NewWriter(newZipFile)
+	defer zipWriter.Close()
+
+	for _, file := range files {
+		if err = addFileToZip(zipWriter, file); err != nil {
+			log.Fatalf("Unable to add file %s to archive - %v\n", file, err)
+		}
+	}
+	return newZipFile.Name()
+}
+
+func addFileToZip(zipWriter *zip.Writer, filename string) error {
+	fileToZip, err := os.Open(filename)
+	if err != nil {
+		return err
+	}
+	defer fileToZip.Close()
+
+	info, err := fileToZip.Stat()
+	if err != nil {
+		return err
+	}
+
+	header, err := zip.FileInfoHeader(info)
+	if err != nil {
+		return err
+	}
+
+	header.Name = fileToZip.Name()
+	header.Method = zip.Deflate
+
+	writer, err := zipWriter.CreateHeader(header)
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(writer, fileToZip)
+	return err
 }

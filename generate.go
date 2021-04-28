@@ -77,7 +77,7 @@ func generateCmd(w http.ResponseWriter, r *http.Request) {
 
 	t.csvRecords = records
 
-	tpl.ExecuteTemplate(w, "display_records.gohtml", &records)
+	tpl.ExecuteTemplate(w, "display_records.gohtml", records)
 }
 
 func generatorPublic(w http.ResponseWriter, r *http.Request) {
@@ -88,11 +88,10 @@ func generatorPublic(w http.ResponseWriter, r *http.Request) {
 
 	t.colIndex = colIndex
 
-	filenames := generatorServer(t)
+	archive := generatorServer(t)
 
-	for _, j := range filenames {
-		fmt.Fprintf(w, "Successfully generated...%v\n", j)
-	}
+	w.Header().Set("Content-Disposition", "attachement; filename=marksheets.zip")
+	http.ServeFile(w, r, archive)
 }
 
 // Serve file to user
