@@ -127,7 +127,7 @@ func addFileToZip(zipWriter *zip.Writer, filename string) error {
 		return err
 	}
 
-	header.Name = fileToZip.Name()
+	header.Name = filepath.Base(fileToZip.Name())
 	header.Method = zip.Deflate
 
 	writer, err := zipWriter.CreateHeader(header)
