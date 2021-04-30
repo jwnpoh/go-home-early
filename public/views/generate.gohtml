@@ -24,12 +24,13 @@
     </div>
 
     <div> 
-      <h4>{{.Title}}</h4>
+      <h3>{{.Title}}</h4>
       <p>{{.Description}}</p>
+      <p>To begin, upload the CSV file of your marksheet template for the whole cohort. After you click 'upload', you will be presented with a prompt to select the column header of the column from which you wish to generate marksheets from.</p>
     </div>
 
     <div>
-    <form action="http://localhost:2021/generate/generator" enctype="multipart/form-data" method="POST">
+    <form action="/generate/generator" enctype="multipart/form-data" method="POST">
       <input class="button" type="file" name="userFile">
       <input class="button" type="submit" value="Upload">
     </form>

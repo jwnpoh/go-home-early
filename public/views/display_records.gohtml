@@ -22,8 +22,10 @@
   </div>
 
   <div class="container">
-    <form action="http://localhost:2021/generate/generated" method="POST">
+    <form action="/generate/generated" method="POST">
+      <h3>Generate</h3>
       <p>Please select the heading for the column that you wish to generate marksheets from: </p>
+      <p>For example, if you want to generate marksheets for each individual tutor on the team, select the "teacher name" (or equivalent) column. If you want to generate marksheets by class, select the "class" column. </p>
       
       {{$header := index . 0}}
       <div class="row">
