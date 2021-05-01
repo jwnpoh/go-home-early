@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-func uploadSingle(w http.ResponseWriter, r *http.Request) {
+func uploadSingle(w http.ResponseWriter, r *http.Request) *os.File {
 	// Check if "tmp" dir exists; if not, make tmp dir
 	if _, err := os.Stat("tmp"); os.IsNotExist(err) {
 		err := os.Mkdir("tmp", 0755)
@@ -29,17 +29,12 @@ func uploadSingle(w http.ResponseWriter, r *http.Request) {
 	defer file.Close()
 
 	// Print out metadata
-	fmt.Printf("Uploaded File: %v\n", header.Filename)
-	fmt.Printf("File Size: %v\n", header.Size)
-	fmt.Printf("MIME Header: %v\n", header.Header)
-
-	buf := make([]byte, 0, 512)
+	fmt.Printf("Uploaded File: %v; File Size: %v\n==> ", header.Filename, header.Size)
 
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
 		log.Fatal("Unable to read uploaded file - ", err)
 	}
-	buf = append(buf, fileBytes...)
 
 	// Check that the correct filetype is uploaded
 	filetype := mime.Detect(fileBytes)
@@ -48,15 +43,20 @@ func uploadSingle(w http.ResponseWriter, r *http.Request) {
 		log.Fatal("Uploaded file of invalid file format.")
 	}
 	// Create tmpFile for working
+	buf := make([]byte, 0, 512)
+	buf = append(buf, fileBytes...)
 	tmpFile, err := ioutil.TempFile("tmp", "tmp*.csv")
 	if err != nil {
 		log.Fatal("Unable to create temp file from upload - ", err)
 	}
 	defer tmpFile.Close()
 
-	tmpFile.Write(buf)
+	_, err = tmpFile.Write(buf)
+	if err != nil {
+		log.Fatal("Unable to write tempfile - ", err)
+	}
 
-	http.ServeFile(w, r, tmpFile.Name())
+	return tmpFile
 }
 
 func uploadMultiple(w http.ResponseWriter, r *http.Request) {
@@ -84,12 +84,16 @@ func uploadMultiple(w http.ResponseWriter, r *http.Request) {
 		}
 		defer file.Close()
 
+		// Print out metadata
+		fmt.Printf("Uploaded File: %v\n", fileHeader.Filename)
+		fmt.Printf("File Size: %v\n", fileHeader.Size)
 		buf := make([]byte, 0, 512)
 
 		fileBytes, err := ioutil.ReadAll(file)
 		if err != nil {
 			log.Fatal("Unable to read uploaded file - ", err)
 		}
+
 		buf = append(buf, fileBytes...)
 
 		// Check that the correct filetype is uploaded

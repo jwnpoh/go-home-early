@@ -9,6 +9,14 @@ import (
 	"path/filepath"
 )
 
+const startMsg = `
+Go Home Early
+Author: Joel Poh
+ National Junior College 2021
+
+==> Started server, listening on port %v....
+==> `
+
 var tpl *template.Template
 
 type server struct {
@@ -19,17 +27,17 @@ type server struct {
 }
 
 func (s *server) start() error {
-	err := open("http://localhost" + s.port)
+	err := open("http://localhost:" + s.port)
 	if err != nil {
 		return err
 	}
 
-	fmt.Println("Started server. Listening at port 2021")
+	fmt.Printf(startMsg, s.port)
 
 	s.parseTemplates()
 	s.serveStatic()
 	s.router()
-	err = http.ListenAndServe(s.port, nil)
+	err = http.ListenAndServe(":"+s.port, nil)
 	if err != nil {
 		return err
 	}
@@ -43,8 +51,7 @@ func (s *server) serveStatic() {
 func (s *server) router() {
 	http.HandleFunc("/", index)
 	http.HandleFunc("/generate", generate)
-	http.HandleFunc("/generate/generator", generateCmd)
-	http.HandleFunc("/generate/generated", generatorPublic)
+	http.HandleFunc("/generate/upload", generateUpload)
 	http.HandleFunc("/serveFile", serveFile)
 }
 
@@ -67,10 +74,11 @@ func serveFile(w http.ResponseWriter, r *http.Request) {
 	filename := r.Form.Get("download")
 	rm := r.Form.Get("remove")
 
-	fmt.Println(filename)
-
 	defer os.RemoveAll(rm)
 	defer os.Remove(filename)
+
+	fmt.Printf("File ready for download. Cleaning up temporary files....\n==> ")
+	fmt.Println("Done!")
 
 	filenamebase := filepath.Base(filename)
 	w.Header().Set("Content-Disposition", "attachment; filename="+filenamebase)

@@ -26,7 +26,7 @@ func open(url string) error {
 func main() {
 	s := newServer()
 
-	s.port = ":2021"
+	s.port = "2021"
 	s.assetPath = "/css/"
 	s.assetDir = "public/assets"
 	s.templateDir = "public/views/"
