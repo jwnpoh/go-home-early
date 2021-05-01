@@ -20,7 +20,7 @@
   <div class="container">
     {{template "header"}}
 
-    <form action="/generate/generated" method="POST">
+    <form action="/generate/upload" method="GET">
       <h3>Generate</h3>
       <p>Please select the heading for the column that you wish to generate marksheets from: </p>
       <p>For example, if you want to generate marksheets for each individual tutor on the team, select the "teacher name" (or equivalent) column. If you want to generate marksheets by class, select the "class" column. </p>
@@ -31,7 +31,7 @@
           <label for="colIndex">Column headers (select one)</label>
           <select id="colIndex" class="u-full-width" name="colIndex">
           {{range $i, $j := $header}}
-            <option value="{{$i}}">{{$j}}</option>
+          <option value="{{$i}}">{{$j}}</option>
           {{end}}
           </select>
           <input class="button" type="submit" value="Submit">
