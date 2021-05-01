@@ -12,15 +12,11 @@ import (
 	mime "github.com/gabriel-vasile/mimetype"
 )
 
-type templateData struct {
-	csvRecords [][]string
-	colIndex   int
-}
-
-var t templateData
+var t csvData
 
 func generate(w http.ResponseWriter, r *http.Request) {
-	err := tpl.ExecuteTemplate(w, "generate.gohtml", cmds[0])
+	info := info["Generate"]
+	err := tpl.ExecuteTemplate(w, "generate.gohtml", info)
 	if err != nil {
 		log.Fatal("unable to execute template - ", err)
 	}
@@ -83,25 +79,27 @@ func generateCmd(w http.ResponseWriter, r *http.Request) {
 }
 
 func generatorPublic(w http.ResponseWriter, r *http.Request) {
-	defer os.RemoveAll(filepath.Join("tmp", "marksheets"))
-	defer os.Remove(filepath.Join("tmp", "marksheets.zip"))
 	colIndex, err := strconv.Atoi(r.FormValue("colIndex"))
 	if err != nil {
 		log.Fatal("Wrong value type received from validation. Check code - ", err)
 	}
 
 	t.colIndex = colIndex
+	filename, filedir := generatorServer(t)
 
-	archive := generatorServer(t)
+	tplDot := fileDelivery{
+		FileName: filename,
+		FileDir:  filedir,
+		FilePath: filepath.Join(filedir, filename),
+	}
 
-	w.Header().Set("Content-Disposition", "attachement; filename=marksheets.zip")
-	http.ServeFile(w, r, archive)
+	tpl.ExecuteTemplate(w, "success.gohtml", tplDot)
 }
 
 // generator takes a csv file and generates separate csv files sorted according to user-defined
 // criteria (e.g. sort by tutor name)
-func generatorServer(t templateData) string {
+func generatorServer(t csvData) (string, string) {
 	filenames := sortItOut(t.csvRecords, t.colIndex)
-	archive := zippyZip(filenames, "marksheets.zip")
-	return archive
+	filename, filedir := zippyZip(filenames, "marksheets.zip")
+	return filename, filedir
 }

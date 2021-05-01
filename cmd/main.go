@@ -1,14 +1,10 @@
 package main
 
 import (
-	"html/template"
 	"log"
-	"net/http"
 	"os/exec"
 	"runtime"
 )
-
-var tpl *template.Template
 
 func open(url string) error {
 	var cmd string
@@ -27,16 +23,13 @@ func open(url string) error {
 	return exec.Command(cmd, args...).Start()
 }
 
-func init() {
-	tpl = template.Must(template.ParseGlob("public/views/*gohtml"))
-}
-
 func main() {
-	err := open("http://localhost:2021/")
-	if err != nil {
-		log.Fatal(err)
-	}
+	s := newServer()
 
-	routes()
-	log.Fatal(http.ListenAndServe(":2021", nil))
+	s.port = ":2021"
+	s.assetPath = "/css/"
+	s.assetDir = "public/assets"
+	s.templateDir = "public/views/"
+
+	log.Fatal(s.start())
 }

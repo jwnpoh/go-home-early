@@ -9,6 +9,23 @@ import (
 	"path/filepath"
 )
 
+type Information struct {
+	Title       string
+	Path        string
+	Description string
+}
+
+type csvData struct {
+	csvRecords [][]string
+	colIndex   int
+}
+
+type fileDelivery struct {
+	FileName string
+	FileDir  string
+	FilePath string
+}
+
 // readCSV opens a csv file and reads it into a [][]string
 func readCSV(f string) [][]string {
 	file, err := os.Open(f)
@@ -92,7 +109,7 @@ func sortItOut(recs [][]string, colIndex int) []string {
 	return xOutName
 }
 
-func zippyZip(files []string, filename string) string {
+func zippyZip(files []string, filename string) (string, string) {
 	newZipFile, err := os.Create(filepath.Join("tmp", filename))
 	if err != nil {
 		log.Fatalf("Unable to create new archive %s - %v\n", filename, err)
@@ -107,7 +124,7 @@ func zippyZip(files []string, filename string) string {
 			log.Fatalf("Unable to add file %s to archive - %v\n", file, err)
 		}
 	}
-	return newZipFile.Name()
+	return filename, "tmp"
 }
 
 func addFileToZip(zipWriter *zip.Writer, filename string) error {
