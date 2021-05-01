@@ -45,7 +45,7 @@ func generateUpload(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("User input column index: %d\n==> ", colIndex)
 
 	tplDot := generatorPublic(colIndex)
-	fmt.Printf("Successfully generated %v for download.\n==> ", tplDot.FilePath)
+	fmt.Printf("Successfully generated %v. \n==> ", tplDot.FilePath)
 	tpl.ExecuteTemplate(w, "success.gohtml", tplDot)
 }
 
