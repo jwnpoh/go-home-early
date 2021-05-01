@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Go Home Early</title>
+  <meta name="Go Home Early, a helper for subject coordinators" content="">
+  <meta name="Joel Poh" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playball&display=swap" rel="stylesheet">
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/normalize.css">
+  <link rel="stylesheet" href="/css/skeleton.css">
+
+  <!-- <link rel="icon" type="image/png" href="images/favicon.png"> -->
+</head>
+
+<body>
+  <div class="container">
+    {{template "header"}}
+
+    <p>Successfully generated {{.FileName}}</p>
+
+    <a class="button" href="/serveFile?download={{.FilePath}}&remove={{.FileDir}}">Download</a>
+
+    {{template "footer"}}
+  </div>
+</body>
+</html>
