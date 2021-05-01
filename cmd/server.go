@@ -24,7 +24,9 @@ func (s *server) start() error {
 		return err
 	}
 
-	parseTemplates(s.templateDir)
+	fmt.Println("Started server. Listening at port 2021")
+
+	s.parseTemplates()
 	s.serveStatic()
 	s.router()
 	err = http.ListenAndServe(s.port, nil)
@@ -46,13 +48,8 @@ func (s *server) router() {
 	http.HandleFunc("/serveFile", serveFile)
 }
 
-func (s *server) serve(file string) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-	}
-}
-
-func parseTemplates(path string) {
-	templates := filepath.Join(path, "*gohtml")
+func (s *server) parseTemplates() {
+	templates := filepath.Join(s.templateDir, "*gohtml")
 	tpl = template.Must(template.ParseGlob(templates))
 }
 
