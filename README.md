@@ -1,4 +1,4 @@
-*Go Home Early is currently in a hacky-anything-that-works status. The app only kinda works and is likely to be buggy.*
+*Go Home Early is currently in a hacky/as long as it works status. The app kinda works but is not guaranteed to work bug-free.*
 
 # What
 Go Home Early is a utility to help subject coordinators (especially those coordinating subjects with large cohorts and numerous classes/tutors) go home early.
