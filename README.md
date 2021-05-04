@@ -1,3 +1,5 @@
+*Go Home Early is currently in a hacky-anything-that-works status. The app only kinda works and is likely to be buggy.*
+
 # What
 Go Home Early is a utility to help subject coordinators (especially those coordinating subjects with large cohorts and numerous classes/tutors) go home early.
 
@@ -47,12 +49,12 @@ Both methods will launch an instance of the default browser requesting at `local
 # Progress:  
 - [x] Basic server and routing
 - [x] Generate command
-- [ ] Record command
+- [x] Record command
 - [ ] Cockpit command
+- [ ] Comments
 - [ ] Analyse command
 - [ ] Testing
 - [ ] Look into session management
 - [ ] Look into security
 - [ ] Better organisation of routes and services  
 
-*Go Home Early is currently in a hacky-nooby-anything-that-works status. The app only kinda works and the code is amateur.*
