@@ -53,6 +53,8 @@ func (s *server) router() {
 	http.HandleFunc("/generate", generate)
 	http.HandleFunc("/generate/upload", generateUpload)
 	http.HandleFunc("/serveFile", serveFile)
+	http.HandleFunc("/record", record)
+	http.HandleFunc("/record/upload", recordUpload)
 }
 
 func (s *server) parseTemplates() {
@@ -66,16 +68,16 @@ func newServer() *server {
 }
 
 func serveFile(w http.ResponseWriter, r *http.Request) {
+	defer os.Exit(0)
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	filename := r.Form.Get("download")
-	rm := r.Form.Get("remove")
+	rmdir := r.Form.Get("remove")
 
-	defer os.RemoveAll(rm)
-	defer os.Remove(filename)
+	defer os.RemoveAll(rmdir)
 
 	fmt.Printf("File ready for download. Cleaning up temporary files....\n==> ")
 	fmt.Println("Done!")

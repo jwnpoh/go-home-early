@@ -15,12 +15,13 @@ type Information struct {
 	Description string
 }
 
-type csvData struct {
-	csvRecords [][]string
-	colIndex   int
+type CsvData struct {
+	CsvRecords   [][]string
+	ColIndex     int
+	FunctionPath string
 }
 
-type fileDelivery struct {
+type FileDelivery struct {
 	FileName string
 	FileDir  string
 	FilePath string
@@ -53,7 +54,7 @@ func readCSV(f string) [][]string {
 	return recs
 }
 
-// writeCSV takes a [][]string and writes csv encoded file specified by the given filename
+// writeCSV takes a [][]string and writes csv encoded file specified by the given filename and returns the filename of the written file and an error if write is not successful.
 func writeCSV(recs [][]string, fileName string) (string, error) {
 	out, err := os.Create(fileName)
 	w := csv.NewWriter(out)

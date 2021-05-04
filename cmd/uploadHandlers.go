@@ -9,7 +9,8 @@ import (
 	"os"
 )
 
-func uploadSingle(w http.ResponseWriter, r *http.Request) *os.File {
+// uploadSingle processes the uploaded file and creates a temp file for working. uploadSingle returns the temp file as *os.File , and the original filename of the uploaded file as a string.
+func uploadSingle(w http.ResponseWriter, r *http.Request) (*os.File, string) {
 	// Check if "tmp" dir exists; if not, make tmp dir
 	if _, err := os.Stat("tmp"); os.IsNotExist(err) {
 		err := os.Mkdir("tmp", 0755)
@@ -19,7 +20,7 @@ func uploadSingle(w http.ResponseWriter, r *http.Request) *os.File {
 	}
 
 	// Get file from http request
-	r.ParseMultipartForm(32 << 20)
+	// r.ParseMultipartForm(32 << 20)
 
 	// Gets the file, and fileheader
 	file, header, err := r.FormFile("userFile")
@@ -56,11 +57,12 @@ func uploadSingle(w http.ResponseWriter, r *http.Request) *os.File {
 		log.Fatal("Unable to write tempfile - ", err)
 	}
 
-	return tmpFile
+	return tmpFile, header.Filename
 }
 
-func uploadMultiple(w http.ResponseWriter, r *http.Request) {
-	var fileNames []string
+// uploadMultiple processes multiple uploaded files and creates temp files for each of them for working. uploadMultiple returns a slice of the temp files as []*os.File.
+func uploadMultiple(w http.ResponseWriter, r *http.Request) []*os.File {
+	var xfiles []*os.File
 
 	// Check if "tmp" dir exists; if not, make tmp dir
 	if _, err := os.Stat("tmp"); os.IsNotExist(err) {
@@ -73,7 +75,7 @@ func uploadMultiple(w http.ResponseWriter, r *http.Request) {
 	// Get file from http request
 	r.ParseMultipartForm(32 << 20)
 
-	files := r.MultipartForm.File["userFile"]
+	files := r.MultipartForm.File["userFiles"]
 
 	// Range over multiple files
 	for _, fileHeader := range files {
@@ -84,9 +86,6 @@ func uploadMultiple(w http.ResponseWriter, r *http.Request) {
 		}
 		defer file.Close()
 
-		// Print out metadata
-		fmt.Printf("Uploaded File: %v\n", fileHeader.Filename)
-		fmt.Printf("File Size: %v\n", fileHeader.Size)
 		buf := make([]byte, 0, 512)
 
 		fileBytes, err := ioutil.ReadAll(file)
@@ -100,19 +99,24 @@ func uploadMultiple(w http.ResponseWriter, r *http.Request) {
 		filetype := mime.Detect(buf)
 		if filetype.String() != "text/csv" {
 			http.Error(w, "The provided file format is not allowed. Please upload only CSV files", http.StatusBadRequest)
-			log.Fatal("Uploaded of invalid file format.")
+			log.Fatalf("Uploaded file %v of invalid file format.\n", fileHeader.Filename)
 		}
 
+		// Print out metadata
+		fmt.Printf("Uploaded File: %v; File Size: %v\n==> ", fileHeader.Filename, fileHeader.Size)
+
 		// Create tmpFile for working
-		tmpFile, err := ioutil.TempFile("tmp", "tmp*.csv")
+		tmpFile, err := ioutil.TempFile("tmp", fileHeader.Filename)
 		if err != nil {
 			log.Fatal("Unable to create temp file from upload - ", err)
 		}
 		defer tmpFile.Close()
 
-		tmpFile.Write(buf)
-
-		fileNames = append(fileNames, tmpFile.Name())
+		_, err = tmpFile.Write(buf)
+		if err != nil {
+			log.Fatalf("Unable to write tmpfile for %v - %v\n", fileHeader.Filename, err)
+		}
+		xfiles = append(xfiles, tmpFile)
 	}
-	fmt.Println(fileNames)
+	return xfiles
 }

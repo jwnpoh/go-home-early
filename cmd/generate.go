@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-var t csvData
+var t CsvData
 
 func generate(w http.ResponseWriter, r *http.Request) {
 	info := info["Generate"]
@@ -20,15 +20,16 @@ func generate(w http.ResponseWriter, r *http.Request) {
 }
 
 func generateUpload(w http.ResponseWriter, r *http.Request) {
-
 	if r.Method == "POST" {
-		tmpFile := uploadSingle(w, r)
+		tmpFile, _ := uploadSingle(w, r)
+
 		// Take file bytes data for manipulation
 		records := readCSV(tmpFile.Name())
 
-		t.csvRecords = records
+		t.CsvRecords = records
+		t.FunctionPath = "/generate/upload"
 
-		tpl.ExecuteTemplate(w, "display_records.gohtml", records)
+		tpl.ExecuteTemplate(w, "display_records.gohtml", t)
 		return
 	}
 
@@ -50,11 +51,11 @@ func generateUpload(w http.ResponseWriter, r *http.Request) {
 }
 
 // func generatorPublic(w http.ResponseWriter, r *http.Request) {
-func generatorPublic(colIndex int) fileDelivery {
-	t.colIndex = colIndex
+func generatorPublic(colIndex int) FileDelivery {
+	t.ColIndex = colIndex
 	filename, filedir := generatorServer(t)
 
-	tplDot := fileDelivery{
+	tplDot := FileDelivery{
 		FileName: filename,
 		FileDir:  filedir,
 		FilePath: filepath.Join(filedir, filename),
@@ -63,8 +64,8 @@ func generatorPublic(colIndex int) fileDelivery {
 	return tplDot
 }
 
-func generatorServer(t csvData) (string, string) {
-	filenames := sortItOut(t.csvRecords, t.colIndex)
+func generatorServer(t CsvData) (string, string) {
+	filenames := sortItOut(t.CsvRecords, t.ColIndex)
 	filename, filedir := zippyZip(filenames, "marksheets.zip")
 	return filename, filedir
 }
