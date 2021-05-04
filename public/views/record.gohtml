@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Go Home Early</title>
+  <meta name="Go Home Early, a helper for subject coordinators" content="">
+  <meta name="Joel Poh" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playball&display=swap" rel="stylesheet">
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/normalize.css">
+  <link rel="stylesheet" href="/css/skeleton.css">
+
+  <!-- <link rel="icon" type="image/png" href="images/favicon.png"> -->
+</head>
+
+
+<body>
+  <div class="container">
+    <div>
+      {{template "header"}}
+    </div>
+
+    <div> 
+      <h3>{{.Title}}</h4>
+      <p>{{.Description}}</p>
+      <p>To begin, upload the CSV file of your marksheet template for the whole cohort as well as all the CSV files of each individual tutor/class.</p>
+    </div>
+
+    <div>
+    <form action="/record/upload" enctype="multipart/form-data" method="POST">
+    <div class="six columns">
+      <input class="button" type="file" name="userFile">
+    </div>
+    <div class="six columns">
+      <input class="button" type="file" name="userFiles" multiple>
+    </div>
+      <input class="button" type="submit" value="Upload">
+    </form>
+  </div>
+
+    <div>
+      {{template "footer"}}
+    </div>
+  </div>
+</body>
+</html>
