@@ -19,7 +19,7 @@ var info = map[string]Information{
 	"Cockpit": {
 		Title:       "Cockpit",
 		Path:        "cockpit",
-		Description: "Copies the total mark from your central results list onto Cockpit-generated CSV templates, which can then be uploaded back to Cockpit directly.",
+		Description: "Coming soon. Copies the total mark from your central results list onto Cockpit-generated CSV templates, which can then be uploaded back to Cockpit directly.",
 	},
 	"Analyse": {
 		Title:       "Analyse",
