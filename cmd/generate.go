@@ -50,7 +50,6 @@ func generateUpload(w http.ResponseWriter, r *http.Request) {
 	tpl.ExecuteTemplate(w, "success.gohtml", tplDot)
 }
 
-// func generatorPublic(w http.ResponseWriter, r *http.Request) {
 func generatorPublic(colIndex int) FileDelivery {
 	t.ColIndex = colIndex
 	filename, filedir := generatorServer(t)
