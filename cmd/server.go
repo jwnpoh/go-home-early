@@ -12,7 +12,7 @@ import (
 const startMsg = `
 Go Home Early
 Author: Joel Poh
- National Junior College 2021
+ 2021 National Junior College
 
 ==> Started server, listening on port %v....
 ==> `
@@ -44,6 +44,11 @@ func (s *server) start() error {
 	return nil
 }
 
+func newServer() *server {
+	var server server
+	return &server
+}
+
 func (s *server) serveStatic() {
 	http.Handle(s.assetPath, http.StripPrefix(s.assetPath, http.FileServer(http.Dir(s.assetDir))))
 }
@@ -55,16 +60,12 @@ func (s *server) router() {
 	http.HandleFunc("/serveFile", serveFile)
 	http.HandleFunc("/record", record)
 	http.HandleFunc("/record/upload", recordUpload)
+	http.HandleFunc("/cockpit", cockpit)
 }
 
 func (s *server) parseTemplates() {
 	templates := filepath.Join(s.templateDir, "*gohtml")
 	tpl = template.Must(template.ParseGlob(templates))
-}
-
-func newServer() *server {
-	var server server
-	return &server
 }
 
 func serveFile(w http.ResponseWriter, r *http.Request) {
