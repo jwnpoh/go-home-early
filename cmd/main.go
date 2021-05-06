@@ -29,7 +29,7 @@ func main() {
 	s.port = "2021"
 	s.assetPath = "/css/"
 	s.assetDir = "public/assets"
-	s.templateDir = "public/views/"
+	s.templateDir = "public/views"
 
 	log.Fatal(s.start())
 }
