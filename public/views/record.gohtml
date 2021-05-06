@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Go Home Early</title>
+  <title>Go Home Early - Record</title>
   <meta name="Go Home Early, a helper for subject coordinators" content="">
   <meta name="Joel Poh" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,15 +26,27 @@
     <div> 
       <h3>{{.Title}}</h4>
       <p>{{.Description}}</p>
-      <p>To begin, upload the CSV file of your marksheet template for the whole cohort as well as all the CSV files of each individual tutor/class.</p>
+      <p>To begin, upload:  
+      <ol>
+        <li>the CSV file of your marksheet template for the whole cohort</li>
+        <li><b>all</b> the CSV files of each individual tutor/class</li>
+      </ol>
+      After uploading the files, you will be prompted to select a column header. This option is used by the program to carry out the matching of scores to the correct students.
+      <br>
+      <br>
+      
+      In order to ensure the accuracy of recording, you <b><em>must</em></b> select the appropriated option for the student name.
+      </p>
     </div>
 
     <div>
     <form action="/record/upload" enctype="multipart/form-data" method="POST">
     <div class="six columns">
+      <label for="userFile">Central Results Template</label>
       <input class="button" type="file" name="userFile">
     </div>
     <div class="six columns">
+      <label for="userFiles">Marksheets from tutors (select all at once!)</label>
       <input class="button" type="file" name="userFiles" multiple>
     </div>
       <input class="button" type="submit" value="Upload">
