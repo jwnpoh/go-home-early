@@ -52,8 +52,8 @@ Both methods will launch an instance of the default browser requesting at `local
 - [x] Record command
 - [ ] Cockpit command
 - [ ] Comments
+- [ ] Tests
 - [ ] Analyse command
-- [ ] Testing
 - [ ] Look into session management
 - [ ] Look into security
 - [ ] Better organisation of routes and services  
