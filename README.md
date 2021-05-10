@@ -28,7 +28,7 @@ Why are we not automating some of these mundane routine tasks?
 
 
 # How  
-
+After building the binary,
 ### Launch from terminal
 ```
 $ go-home-early
@@ -53,8 +53,9 @@ Both methods will launch an instance of the default browser requesting at `local
 - [ ] Cockpit command
 - [ ] Comments
 - [ ] Tests
-- [ ] Analyse command
 - [ ] Look into session management
 - [ ] Look into security
 - [ ] Better organisation of routes and services  
+- [ ] Analyse command
+- [ ] Do I want to work with Excel?
 
