@@ -57,6 +57,10 @@ func readCSV(f string) [][]string {
 // writeCSV takes a [][]string and writes csv encoded file specified by the given filename and returns the filename of the written file and an error if write is not successful.
 func writeCSV(recs [][]string, fileName string) (string, error) {
 	out, err := os.Create(fileName)
+    if err != nil{
+        log.Fatal(err)
+    }
+
 	w := csv.NewWriter(out)
 	defer out.Close()
 
@@ -110,6 +114,7 @@ func sortItOut(recs [][]string, colIndex int) []string {
 	return xOutName
 }
 
+// zippyZip compresses a range of files "files" into an archive "filename". It takes a string of filenames for a range of files and returns the filename of the newly created archive and the directory where this archive is created.
 func zippyZip(files []string, filename string) (string, string) {
 	newZipFile, err := os.Create(filepath.Join("tmp", filename))
 	if err != nil {
@@ -128,6 +133,7 @@ func zippyZip(files []string, filename string) (string, string) {
 	return filename, "tmp"
 }
 
+// addFileToZip prepares a file specified by "filename" to be added to zipWriter.
 func addFileToZip(zipWriter *zip.Writer, filename string) error {
 	fileToZip, err := os.Open(filename)
 	if err != nil {

@@ -46,7 +46,7 @@ func uploadSingle(w http.ResponseWriter, r *http.Request) (*os.File, string) {
 	// Create tmpFile for working
 	buf := make([]byte, 0, 512)
 	buf = append(buf, fileBytes...)
-	tmpFile, err := ioutil.TempFile("tmp", "tmp*.csv")
+	tmpFile, err := ioutil.TempFile("tmp", "tmp*"+".csv")
 	if err != nil {
 		log.Fatal("Unable to create temp file from upload - ", err)
 	}
@@ -106,7 +106,7 @@ func uploadMultiple(w http.ResponseWriter, r *http.Request) []*os.File {
 		fmt.Printf("Uploaded File: %v; File Size: %v\n==> ", fileHeader.Filename, fileHeader.Size)
 
 		// Create tmpFile for working
-		tmpFile, err := ioutil.TempFile("tmp", fileHeader.Filename)
+		tmpFile, err := ioutil.TempFile("tmp", "tmp*" + ".csv")
 		if err != nil {
 			log.Fatal("Unable to create temp file from upload - ", err)
 		}

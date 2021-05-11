@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 )
 
@@ -28,8 +29,8 @@ func main() {
 
 	s.port = "2021"
 	s.assetPath = "/css/"
-	s.assetDir = "public/assets"
-	s.templateDir = "public/views"
+	s.assetDir = filepath.Join("public", "assets")
+	s.templateDir = filepath.Join("public", "views")
 
 	log.Fatal(s.start())
 }
