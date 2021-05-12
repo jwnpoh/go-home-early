@@ -13,6 +13,8 @@ type Information struct {
 	Title       string
 	Path        string
 	Description string
+  DisplayMsgInstruction string 
+  DisplayMsgElab string
 }
 
 type CsvData struct {
