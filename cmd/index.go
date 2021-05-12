@@ -27,11 +27,6 @@ var info = map[string]Information{
     DisplayMsgInstruction: "Please select the heading for the student name column:",
     DisplayMsgElab: "Since we are transferring the marks of each individual student from our central results template onto the Cockpit-generated CSV files for each class, we must make sure that each student's marks are recorded accurately.",
 	},
-	"Analyse": {
-		Title:       "Analyse",
-		Path:        "analyse",
-		Description: "Analyses results data. Work in progress.",
-	},
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
@@ -39,7 +34,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 		info["Generate"],
 		info["Record"],
 		info["Cockpit"],
-		info["Analyse"],
 	}
 	err := tpl.ExecuteTemplate(w, "index.gohtml", tplDot)
 	if err != nil {
