@@ -12,6 +12,7 @@ type RecData struct {
 	CsvData
 	XInputRecs [][][]string
 	OutputName string
+  Information
 }
 
 var rec RecData
@@ -51,6 +52,7 @@ func recordUpload(w http.ResponseWriter, r *http.Request) {
 		rec.XInputRecs = xinputRecs
 		rec.CsvRecords = masterRecs
 		rec.FunctionPath = "/record/upload"
+    rec.Information = info["Record"]
 
 		tpl.ExecuteTemplate(w, "display_records.gohtml", rec)
 		return

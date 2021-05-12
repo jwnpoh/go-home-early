@@ -8,7 +8,12 @@ import (
 	"strconv"
 )
 
-var t CsvData
+type GenData struct {
+  CsvData
+  Information
+}
+
+var t GenData
 
 func generate(w http.ResponseWriter, r *http.Request) {
 	info := info["Generate"]
@@ -28,6 +33,7 @@ func generateUpload(w http.ResponseWriter, r *http.Request) {
 
 		t.CsvRecords = records
 		t.FunctionPath = "/generate/upload"
+    t.Information = info["Generate"]
 
 		tpl.ExecuteTemplate(w, "display_records.gohtml", t)
 		return
@@ -63,7 +69,7 @@ func generatorPublic(colIndex int) FileDelivery {
 	return tplDot
 }
 
-func generatorServer(t CsvData) (string, string) {
+func generatorServer(t GenData) (string, string) {
 	filenames := sortItOut(t.CsvRecords, t.ColIndex)
 	filename, filedir := zippyZip(filenames, "marksheets.zip")
 	return filename, filedir
