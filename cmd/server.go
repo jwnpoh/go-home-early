@@ -26,6 +26,8 @@ type server struct {
 	templateDir string
 }
 
+var s server
+
 func (s *server) start() error {
 	err := open("http://localhost:" + s.port)
 	if err != nil {
@@ -45,8 +47,7 @@ func (s *server) start() error {
 }
 
 func newServer() *server {
-	var server server
-	return &server
+	return &s
 }
 
 func (s *server) serveStatic() {
