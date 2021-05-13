@@ -10,11 +10,11 @@ import (
 )
 
 type Information struct {
-	Title       string
-	Path        string
-	Description string
-  DisplayMsgInstruction string 
-  DisplayMsgElab string
+	Title                 string
+	Path                  string
+	Description           string
+	DisplayMsgInstruction string
+	DisplayMsgElab        string
 }
 
 type CsvData struct {
@@ -59,9 +59,9 @@ func readCSV(f string) [][]string {
 // writeCSV takes a [][]string and writes csv encoded file specified by the given filename and returns the filename of the written file and an error if write is not successful.
 func writeCSV(recs [][]string, fileName string) (string, error) {
 	out, err := os.Create(fileName)
-    if err != nil{
-        log.Fatal(err)
-    }
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	w := csv.NewWriter(out)
 	defer out.Close()
