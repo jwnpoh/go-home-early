@@ -19,9 +19,6 @@ func uploadSingle(w http.ResponseWriter, r *http.Request) (*os.File, string) {
 		}
 	}
 
-	// Get file from http request
-	// r.ParseMultipartForm(32 << 20)
-
 	// Gets the file, and fileheader
 	file, header, err := r.FormFile("userFile")
 	if err != nil {
